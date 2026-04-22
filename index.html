@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>particulat 的个人主页</title>
+    <style>
+        /* --- 全局基础设置 --- */
+        :root {
+            --bg-color: #f2f3f5;
+            --card-bg: #ffffff;
+            --text-main: #24292e;
+            --text-sub: #586069;
+            --radius: 12px;
+            --shadow: 0 4px 12px rgba(0,0,0,0.08);
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* --- 主容器 --- */
+        .container {
+            width: 100%;
+            max-width: 900px;
+            padding: 40px 20px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            justify-content: center;
+        }
+
+        /* --- 左侧栏：个人信息 --- */
+        .left-column {
+            flex: 1;
+            min-width: 280px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            padding-top: 20px;
+        }
+
+        .avatar {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            border: 4px solid var(--card-bg);
+            box-shadow: var(--shadow);
+            margin-bottom: 20px;
+            /* 这里使用了开源图床的头像，你可以替换成你自己的 */
+            background-image: url('touxiang.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .name {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 0;
+            color: #1a1a1a;
+        }
+
+        .bio {
+            font-size: 16px;
+            color: var(--text-sub);
+            margin-top: 8px;
+        }
+
+        /* --- 右侧栏：卡片区域 --- */
+        .right-column {
+            flex: 2;
+            min-width: 300px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* --- 通用卡片样式 --- */
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            padding: 20px;
+            transition: transform 0.2s;
+        }
+        .card:hover {
+            transform: translateY(-2px);
+        }
+
+        /* --- 顶部三张卡片布局 --- */
+        .top-section {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .info-card {
+            flex: 1;
+            min-width: 250px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .links-grid {
+            flex: 1;
+            min-width: 250px;
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        /* --- 按钮链接样式 --- */
+        .link-btn {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            font-size: 15px;
+            transition: opacity 0.2s;
+        }
+        .link-btn:hover { opacity: 0.9; }
+
+        /* 品牌色 */
+        .lime { background-color: #00C853; color: #fff !important; }
+        .zhihu { background-color: #0066CC; }
+        .bilibili { background-color: #FB7299; }
+        .github { background-color: #24292E; }
+        .yunnan { background-color: #FF3B30; color: #fff !important; }
+        .qwen { background-color: #66CCFF; color: #fff !important; }
+        .tencent { background-color: #40E0D0; color: #fff !important; }
+
+        .follower-count {
+            background: rgba(255,255,255,0.2);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: normal;
+        }
+
+        /* --- 博客卡片 --- */
+        .blog-card {
+            background-color: #2d3748; /* 深蓝灰色背景 */
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .blog-info h3 { margin: 0 0 8px 0; font-size: 18px; }
+        .blog-info p { margin: 0; font-size: 14px; opacity: 0.8; line-height: 1.5; }
+        .blog-info a { color: #63b3ed; text-decoration: none; font-size: 13px; }
+        
+        .blog-action {
+            background: rgba(255,255,255,0.1);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            text-decoration: none;
+            color: white;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        /* --- 文章列表 --- */
+        .articles-section {
+            margin-top: 10px;
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title::before {
+            content: "📄";
+            margin-right: 8px;
+        }
+
+        .filter-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+        .tab {
+            padding: 6px 12px;
+            background: #e1e4e8;
+            border-radius: 6px;
+            font-size: 14px;
+            cursor: pointer;
+            white-space: nowrap;
+            color: var(--text-sub);
+        }
+        .tab.active {
+            background: #d1d5da;
+            color: #1a1a1a;
+            font-weight: 600;
+        }
+
+        .article-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .article-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            font-size: 15px;
+            cursor: pointer;
+            transition: color 0.2s;
+        }
+        .article-item:hover {
+            color: #0066CC;
+        }
+        .article-date {
+            color: var(--text-sub);
+            font-size: 14px;
+            margin-left: 20px;
+            white-space: nowrap;
+        }
+
+        /* --- 响应式适配 --- */
+        @media (max-width: 768px) {
+            .top-section {
+                flex-direction: column;
+            }
+            .container {
+                padding: 20px 10px;
+            }
+            .avatar { width: 120px; height: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <!-- 左侧：头像与简介 -->
+        <div class="left-column">
+            <div class="avatar"></div>
+            <h1 class="name">particulat</h1>
+            <p class="bio">Stay simple, stay naive.</p>
+        </div>
+
+        <!-- 右侧：内容卡片 -->
+        <div class="right-column">
+            
+            <!-- 顶部：简介与链接 -->
+            <div class="top-section">
+                <!-- 个人简介卡 -->
+                <div class="card info-card">
+                    <h3>particulat</h3>
+                    <p style="font-size: 14px; color: #555; margin-top: 8px;">
+                        /独立学习爱好者/个人博主<br>
+                        东方科技大学20届本科 & 国防科技大学MBA在读
+                    </p>
+                    <a href="#" style="align-self: flex-start; background:#eee; padding: 4px 10px; border-radius: 12px; font-size: 12px; color: #555; text-decoration: none; margin-top: 10px;">关于我 · 了解更多</a>
+                </div>
+
+                <!-- 社交链接 -->
+                <div class="links-grid">
+                    <a href="https://www.limestart.cn/" target="_blank" class="link-btn lime">
+                        青柠起始页 <span class="follower-count">1086 Followers</span>
+                    </a>
+                    <a href="https://www.zhihu.com" target="_blank" class="link-btn zhihu">
+                        知乎 <span class="follower-count">1086 Followers</span>
+                    </a>
+                    <a href="https://www.bilibili.com" target="_blank" class="link-btn bilibili">
+                        Bilibili <span class="follower-count">1086 Followers</span>
+                    </a>
+                    <a href="https://github.com" target="_blank" class="link-btn github">
+                        GitHub <span class="follower-count">1086 Followers</span>
+                    </a>
+                    <a href="https://cloud.ynjtt.com/#/login" target="_blank" class="link-btn yunnan">
+                        云南交通云平台 <span class="follower-count">1086 Followers</span>
+                    </a>
+                   <a href="https://tongyi.cn/" target="_blank" class="link-btn qwen">
+                       千问 <span class="follower-count">1086 Followers</span>
+                    </a>
+                   <a href="https://v.qq.com/" target="_blank" class="link-btn tencent">
+                       腾讯视频 <span class="follower-count">1086 Followers</span>
+                    </a>
+
+                </div>
+            </div>
+
+            <!-- 中部：博客简介卡 -->
+            <div class="card blog-card">
+                <div class="blog-info">
+                    <h3>博客</h3>
+                    <p>记录技术/生活/随想/测评<br>https://particulat.top</p>
+                    <a href="https://particulat.top" target="_blank" class="blog-action">去逛逛 · 历史文章</a>
+                </div>
+            </div>
+
+            <!-- 底部：文章列表 -->
+            <div class="card articles-section">
+                <div class="section-title">博客文章</div>
+                
+                <div class="filter-tabs">
+                    <div class="tab active">最新</div>
+                    <div class="tab">技术</div>
+                    <div class="tab">生活</div>
+                    <div class="tab">随想</div>
+                    <div class="tab">测评</div>
+                </div>
+
+                <ul class="article-list">
+                    <li class="article-item">
+                        <span>关于 AI 的一些形而上思考</span>
+                        <span class="article-date">2024.11.17</span>
+                    </li>
+                    <li class="article-item">
+                        <span>2026 年，从「记笔记」到「积累数字资产」</span>
+                        <span class="article-date">2024.11.09</span>
+                    </li>
+                    <li class="article-item">
+                        <span>再赴一场盛夏：写给下一个五年</span>
+                        <span class="article-date">2025.08.31</span>
+                    </li>
+                </ul>
+            </div>
+
+        </div>
+    </div>
+
+</body>
+</html>
